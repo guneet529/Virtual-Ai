@@ -84,7 +84,14 @@ function takeCommand(message) {
     } else if (message.includes("date")) {
         let date = new Date().toLocaleString(undefined, { day: "numeric", month: "short" });
         speak("Today's date is " + date);
-    } else {
+    }
+    else if (message.startsWith("play")) {
+        let songQuery = message.replace("play", "").trim(); 
+        speak("Playing " + songQuery);
+        openWindow(`https://www.youtube.com/results?search_query=${encodeURIComponent(songQuery)}`);
+    }
+    
+     else {
         let finalText = "This is what I found on the internet regarding " + message;
         speak(finalText);
         openWindow(`https://www.google.com/search?q=${message}`);
