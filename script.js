@@ -105,6 +105,59 @@
 // }
 
 
+let btn = document.querySelector("#btn");
+let content = document.querySelector("#content");
+let voice = document.querySelector("#voice");
+
+function speak(text) {
+    let text_speak = new SpeechSynthesisUtterance(text);
+    text_speak.rate = 1;
+    text_speak.pitch = 1;
+    text_speak.volume = 1;
+    window.speechSynthesis.speak(text_speak);
+}
+
+function wishMe() {
+    let day = new Date();
+    let hours = day.getHours();
+    if (hours >= 0 && hours < 12) {
+        speak("Good Morning Sir");
+    } else if (hours >= 12 && hours < 16) {
+        speak("Good Afternoon Sir");
+    } else {
+        speak("Good Evening Sir");
+    }
+}
+
+window.addEventListener('load', () => {
+    wishMe();
+});
+
+let speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = new speechRecognition();
+
+recognition.onstart = () => {
+    // Show the voice GIF and hide the button when listening starts
+    btn.style.display = "none";
+    voice.style.display = "block";
+};
+
+recognition.onend = () => {
+    // Hide the voice GIF and show the button again when listening ends
+    voice.style.display = "none";
+    btn.style.display = "flex";
+};
+
+recognition.onresult = (event) => {
+    let currentIndex = event.resultIndex;
+    let transcript = event.results[currentIndex][0].transcript;
+    content.innerText = transcript;
+    takeCommand(transcript.toLowerCase());
+};
+
+btn.addEventListener("click", () => {
+    recognition.start();
+});
 
 function takeCommand(message) {
     // Normalize the message to lower case for easier comparison
@@ -126,7 +179,7 @@ function takeCommand(message) {
             openWindow("https://instagram.com/");
         } else if (normalizedMessage.includes("whatsapp")) {
             speak("Opening WhatsApp...");
-            openWindow("https://whatsapp.com/");
+            openWindow("https://web.whatsapp.com/");
         } else {
             speak("Sorry, I can't open that application.");
         }
@@ -155,4 +208,10 @@ function takeCommand(message) {
         speak(finalText);
         openWindow(`https://www.google.com/search?q=${encodeURIComponent(message)}`);
     }
+}
+
+function openWindow(url) {
+    setTimeout(() => {
+        window.open(url, "_blank");
+    }, 100);
 }
