@@ -18,7 +18,9 @@ function wishMe() {
         speak("Good Morning Sir");
     } else if (hours >= 12 && hours < 16) {
         speak("Good Afternoon Sir");
-    } else {
+    }
+        
+        else {
         speak("Good Evening Sir");
     }
 }
@@ -39,9 +41,11 @@ recognition.onresult = (event) => {
 };
 
 btn.addEventListener("click", () => {
+    
     recognition.start();
     btn.style.display = "none";
     voice.style.display = "block";
+
 });
 
 function takeCommand(message) {
@@ -86,5 +90,5 @@ function openWindow(url) {
     // Ensure the window.open happens directly after user interaction
     setTimeout(() => {
         window.open(url, "_blank");
-    }, 100); // Small delay to allow speech to finish before opening
+    }, 100);
 }
