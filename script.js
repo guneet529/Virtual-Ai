@@ -7,7 +7,6 @@ function speak(text) {
     text_speak.rate = 1;
     text_speak.pitch = 1;
     text_speak.volume = 1;
-    
     window.speechSynthesis.speak(text_speak);
 }
 
@@ -18,11 +17,13 @@ function wishMe() {
         speak("Good Morning Sir");
     } else if (hours >= 12 && hours < 16) {
         speak("Good Afternoon Sir");
-    }
-        
-        else {
+    } else {
         speak("Good Evening Sir");
     }
+}
+
+function greet(){
+    speak("How can I help you?");
 }
 
 window.addEventListener('load', () => {
@@ -32,26 +33,30 @@ window.addEventListener('load', () => {
 let speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = new speechRecognition();
 
+recognition.onstart = () => {
+    // Show the voice GIF and hide the button when listening starts
+    btn.style.display = "none";
+    voice.style.display = "block";
+};
+
+recognition.onend = () => {
+    // Hide the voice GIF and show the button again when listening ends
+    voice.style.display = "none";
+    btn.style.display = "flex";
+};
+
 recognition.onresult = (event) => {
     let currentIndex = event.resultIndex;
     let transcript = event.results[currentIndex][0].transcript;
     content.innerText = transcript;
-    
     takeCommand(transcript.toLowerCase());
 };
 
 btn.addEventListener("click", () => {
-    
     recognition.start();
-    btn.style.display = "none";
-    voice.style.display = "block";
-
 });
 
 function takeCommand(message) {
-    voice.style.display = "none";
-    btn.style.display = "flex";
-
     if (message.includes("hello") || message.includes("hey")) {
         speak("Hello sir, what can I help you with?");
     } else if (message.includes("who are you")) {
@@ -87,7 +92,6 @@ function takeCommand(message) {
 }
 
 function openWindow(url) {
-    // Ensure the window.open happens directly after user interaction
     setTimeout(() => {
         window.open(url, "_blank");
     }, 100);
