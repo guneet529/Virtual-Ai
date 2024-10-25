@@ -160,7 +160,6 @@ btn.addEventListener("click", () => {
 });
 
 function takeCommand(message) {
-    // Normalize the message to lower case for easier comparison
     const normalizedMessage = message.toLowerCase();
 
     // Open specific applications or websites
@@ -179,7 +178,13 @@ function takeCommand(message) {
             openWindow("https://instagram.com/");
         } else if (normalizedMessage.includes("whatsapp")) {
             speak("Opening WhatsApp...");
-            openWindow("https://web.whatsapp.com/");
+            if (isMobileDevice()) {
+                // For mobile devices, use the WhatsApp app URL
+                openWindow("whatsapp://");
+            } else {
+                // For desktop, open WhatsApp Web
+                openWindow("https://web.whatsapp.com/");
+            }
         } else {
             speak("Sorry, I can't open that application.");
         }
@@ -209,6 +214,11 @@ function takeCommand(message) {
         openWindow(`https://www.google.com/search?q=${encodeURIComponent(message)}`);
     }
 }
+
+function isMobileDevice() {
+    return /Mobi|Android/i.test(navigator.userAgent);
+}
+
 
 function openWindow(url) {
     setTimeout(() => {
