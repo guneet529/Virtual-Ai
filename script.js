@@ -57,6 +57,9 @@ btn.addEventListener("click", () => {
 function takeCommand(message) {
     const normalizedMessage = message.toLowerCase();
 
+
+    
+
     // Open specific applications or websites
     if (normalizedMessage.includes("open")) {
         if (normalizedMessage.includes("youtube")) {
@@ -104,10 +107,15 @@ function takeCommand(message) {
     }
     // If no recognized commands, perform a Google search
     else {
-        let finalText = "This is what I found on the internet regarding " + message;
+        // Strip "victoria" from message
+        const sanitizedMessage = message.replace(/victoria/gi, "").trim();
+        let finalText = "This is what I found on the internet regarding " + sanitizedMessage;
         speak(finalText);
-        openWindow(`https://www.google.com/search?q=${encodeURIComponent(message)}`);
+        openWindow(`https://www.google.com/search?q=${encodeURIComponent(sanitizedMessage)}`, "_blank");
     }
+    
+    
+    
 }
 
 function isMobileDevice() {
@@ -119,3 +127,9 @@ function openWindow(url) {
         window.open(url, "_blank");
     }, 100);
 }
+
+
+
+
+
+
